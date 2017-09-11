@@ -3,11 +3,6 @@ deploy:
     - bash-template:
         cwd: $WERCKER_ROOT
 
-    - script:
-        name: show kube yaml
-        code: |
-          cat $WERCKER_ROOT/inventory-cassandra-OKE.yaml
-
     - kubectl:
         server: $KUBERNETES_MASTER
         token: $KUBERNETES_TOKEN
