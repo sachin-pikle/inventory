@@ -1,0 +1,55 @@
+#
+# Copyright (c) 2017 Oracle and/or its affiliates. All rights reserved.
+#
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: j4c-ecommerce-inventory-cassandra
+  labels:
+    run: j4c-ecommerce-inventory-cassandra
+spec:
+  replicas: 1
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      run: j4c-ecommerce-inventory-cassandra
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        run: j4c-ecommerce-inventory-cassandra
+    spec:
+      containers:
+      - image: registry-alpha.oracledx.com/sachin-pikle/test/j4c-ecommerce-inventory-cassandra:latest
+        imagePullPolicy: Always
+        name: j4c-ecommerce-inventory-cassandra
+        ports:
+        - containerPort: 9042
+          protocol: TCP
+      imagePullSecrets:
+      - name: regalphasecret
+      restartPolicy: Always
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: j4c-ecommerce-inventory-cassandra
+  labels:
+    run: j4c-ecommerce-inventory-cassandra
+spec:
+  ports:
+  - name: http
+    protocol: TCP
+    port: 9042
+    targetPort: 9042
+  selector:
+    run: j4c-ecommerce-inventory-cassandra
+  sessionAffinity: None
+  type: NodePort
