@@ -25,7 +25,7 @@ spec:
         run: j4c-ecommerce-inventory-cassandra
     spec:
       containers:
-      - image: registry-alpha.oracledx.com/sachin-pikle/test/j4c-ecommerce-inventory-cassandra:latest
+      - image: registry-alpha.oracledx.com/sachin-pikle/j4c-ecommerce-inventory-cassandra:latest
         imagePullPolicy: Always
         name: j4c-ecommerce-inventory-cassandra
         ports:
