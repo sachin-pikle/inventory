@@ -2,11 +2,11 @@ box: golang:1.8
 
 deploy:
   steps:
-    - script:
-        name: Register Inventory REST service in APIP
-        code: |
-          CONTAINER_HOST=$($WERCKER_STEP_ROOT/kubectl get service rest-inventory -o jsonpath={.status.loadBalancer.ingress[0].ip})
-          echo 'Container host=' $CONTAINER_HOST
+    - kubectl:
+        server: $KUBERNETES_MASTER
+        token: $KUBERNETES_TOKEN
+        insecure-skip-tls-verify: true
+        command: get service rest-inventory -o jsonpath={.status.loadBalancer.ingress[0].ip}
     - kubectl:
         server: $KUBERNETES_MASTER
         token: $KUBERNETES_TOKEN
