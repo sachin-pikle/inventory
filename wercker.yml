@@ -5,7 +5,7 @@ deploy:
     - script:
         name: Register Inventory REST service in APIP
         code: |
-          CONTAINER_HOST=$(kubectl get service rest-inventory -o jsonpath={.status.loadBalancer.ingress[0].ip})
+          CONTAINER_HOST=$($WERCKER_STEP_ROOT/kubectl get service rest-inventory -o jsonpath={.status.loadBalancer.ingress[0].ip})
           echo 'Container host=' $CONTAINER_HOST
     - kubectl:
         server: $KUBERNETES_MASTER
