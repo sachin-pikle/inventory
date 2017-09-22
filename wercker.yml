@@ -11,15 +11,21 @@ deploy:
         export KUBERNETES_SHA256="f8ef17b8b4bb8f6974fa2b3faa992af3c39ad318c30bdfe1efab957361d8bdfe"
         echo "Installing version $KUBERNETES_VERSION of kubernetes"
 
-    - kubectl:
-        server: $KUBERNETES_MASTER
-        token: $KUBERNETES_TOKEN
-        insecure-skip-tls-verify: true
-        command: get service rest-inventory -o jsonpath={.status.loadBalancer.ingress[0].ip}
+    - script:
+      name: fetch kubernetes archive
+      code: |
+        curl -L https://dl.k8s.io/v${KUBERNETES_VERSION}/kubernetes-client-linux-amd64.tar.gz > kubernetes-client-linux-amd64.tar.gz
+        sha256sum kubernetes-client-linux-amd64.tar.gz | grep -q "$KUBERNETES_SHA256"
+        tar xvzf kubernetes-client-linux-amd64.tar.gz
+        kubernetes/client/bin/kubectl version --client
+
+    - script:
+      name: prepare output
+      code: cp "kubernetes/client/bin/kubectl" "LICENSE" "README.md" "run.sh" "wercker.yml" "wercker-step.yml" "$WERCKER_OUTPUT_DIR"
     - script:
         name: Register Inventory REST service in APIP
         code: |
-          which kubectl
+          $WERCKER_OUTPUT_DIR/kubectl --server $KUBERNETES_MASTER --token $KUBERNETES_TOKEN --insecure-skip-tls-verify: true get service rest-inventory -o jsonpath={.status.loadBalancer.ingress[0].ip}
     - kubectl:
         server: $KUBERNETES_MASTER
         token: $KUBERNETES_TOKEN
