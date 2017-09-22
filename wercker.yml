@@ -25,7 +25,7 @@ deploy:
     - script:
         name: Register Inventory REST service in APIP
         code: |
-          $WERCKER_OUTPUT_DIR/kubectl --server $KUBERNETES_MASTER --token $KUBERNETES_TOKEN get service rest-inventory -o jsonpath={.status.loadBalancer.ingress[0].ip}
+          $WERCKER_OUTPUT_DIR/kubectl --server=$KUBERNETES_MASTER --token=$KUBERNETES_TOKEN --insecure-skip-tls-verify=true get service rest-inventory -o jsonpath={.status.loadBalancer.ingress[0].ip}
     - kubectl:
         server: $KUBERNETES_MASTER
         token: $KUBERNETES_TOKEN
