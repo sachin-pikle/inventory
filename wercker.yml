@@ -21,7 +21,7 @@ deploy:
 
     - script:
       name: prepare output
-      code: cp "kubernetes/client/bin/kubectl" "LICENSE" "README.md" "run.sh" "wercker.yml" "wercker-step.yml" "$WERCKER_OUTPUT_DIR"
+      code: cp "kubernetes/client/bin/kubectl" "$WERCKER_OUTPUT_DIR"
     - script:
         name: Register Inventory REST service in APIP
         code: |
