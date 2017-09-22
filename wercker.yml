@@ -2,15 +2,15 @@ box: golang:1.8
 
 deploy:
   steps:
-    - script:
-        name: Register Inventory REST service in APIP
-        code: |
-          which kubectl
     - kubectl:
         server: $KUBERNETES_MASTER
         token: $KUBERNETES_TOKEN
         insecure-skip-tls-verify: true
         command: get service rest-inventory -o jsonpath={.status.loadBalancer.ingress[0].ip}
+    - script:
+        name: Register Inventory REST service in APIP
+        code: |
+          which kubectl
     - kubectl:
         server: $KUBERNETES_MASTER
         token: $KUBERNETES_TOKEN
